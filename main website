@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CorePrime - Get Your Prime Back</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                            gold: '#f59e0b'
+                        },
+                        dark: {
+                            bg: '#0f172a',
+                            card: '#1e293b',
+                            border: '#334155'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        .exercise-card-split {
+            display: flex;
+            flex-direction: column;
+        }
+        @media (min-width: 768px) {
+            .exercise-card-split {
+                display: grid;
+                grid-template-columns: 260px 1fr;
+            }
+        }
+        .exercise-img-wrapper {
+            width: 100%;
+            height: 240px;
+            background-color: #0f172a;
+        }
+        @media (min-width: 768px) {
+            .exercise-img-wrapper {
+                height: 100%;
+                min-height: 280px;
+            }
+        }
+        .exercise-portrait-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 bg-dark-card/90 backdrop-blur-md border-b border-dark-border">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-lg shadow-brand-600/30">
+                    <i class="fa-solid fa-bolt text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-tight text-white leading-none">CORE<span class="text-brand-500">PRIME</span></h1>
+                    <p class="text-xs text-emerald-400 font-semibold tracking-wide uppercase mt-0.5">Get Your Prime Back</p>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <nav class="flex items-center space-x-2 bg-dark-bg p-1.5 rounded-xl border border-dark-border">
+                <button onclick="switchTab('workout')" id="nav-workout" class="px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 bg-brand-600 text-white shadow-md">
+                    <i class="fa-solid fa-dumbbell mr-2"></i>Workout Generator
+                </button>
+                <button onclick="switchTab('nutrition')" id="nav-nutrition" class="px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-apple-whole mr-2"></i>40+ Nutrition
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
+
+        <!-- WORKOUT GENERATOR PAGE -->
+        <section id="page-workout" class="space-y-8">
+            <!-- Intro Banner -->
+            <div class="bg-gradient-to-r from-dark-card via-slate-800 to-dark-card p-6 md:p-8 rounded-2xl border border-dark-border shadow-xl">
+                <div class="max-w-3xl">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-brand-500/20 text-brand-500 border border-brand-500/30 mb-3">
+                        <i class="fa-solid fa-shield-heart mr-1.5"></i> Joint-Safe Over-40 Fitness
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Tailored Fat Loss & Core Strength Routine</h2>
+                    <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+                        Say goodbye to high-impact jumping and painful knee stress. CorePrime generates personalized routines designed to stimulate metabolism, burn visceral belly fat, and strengthen your core while protecting aging joints.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Generator Control Panel -->
+            <div class="bg-dark-card p-6 rounded-2xl border border-dark-border shadow-lg">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center">
+                    <i class="fa-solid fa-sliders text-brand-500 mr-2"></i> Configure Your Workout Preferences
+                </h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Fitness Level -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Fitness Level</label>
+                        <select id="pref-level" class="w-full bg-dark-bg border border-dark-border text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-brand-500 transition-colors">
+                            <option value="beginner">Beginner (Gentle Intro)</option>
+                            <option value="intermediate" selected>Intermediate (Active Builder)</option>
+                        </select>
+                    </div>
+
+                    <!-- Target / Joint Focus -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Joint / Target Focus</label>
+                        <select id="pref-focus" class="w-full bg-dark-bg border border-dark-border text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-brand-500 transition-colors">
+                            <option value="knees" selected>Low Knee Stress</option>
+                            <option value="back">Low Back Stress</option>
+                            <option value="shoulders">Shoulders & Spine</option>
+                            <option value="hips">Hips & Lower Back</option>
+                            <option value="full">Full Body Core Protection</option>
+                        </select>
+                    </div>
+
+                    <!-- Workout Style -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Workout Style</label>
+                        <select id="pref-style" class="w-full bg-dark-bg border border-dark-border text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-brand-500 transition-colors">
+                            <option value="core" selected>Core & Anti-Rotation</option>
+                            <option value="cardio">Low-Impact Cardio Fat-Burn</option>
+                            <option value="mobility">Active Mobility & Flexibility</option>
+                        </select>
+                    </div>
+
+                    <!-- Duration -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Duration</label>
+                        <select id="pref-duration" class="w-full bg-dark-bg border border-dark-border text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-brand-500 transition-colors">
+                            <option value="10">10 Min Express (3 Moves)</option>
+                            <option value="20" selected>20 Min Full Routine (5 Moves)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end">
+                    <button onclick="generateWorkout()" class="w-full sm:w-auto px-8 py-3.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl shadow-lg shadow-brand-600/30 transition-all flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                        <span>Generate Personalized Routine</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Workout Output List -->
+            <div id="workout-results" class="space-y-6">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+        </section>
+
+        <!-- 40+ NUTRITION & METABOLISM PAGE -->
+        <section id="page-nutrition" class="space-y-8 hidden">
+            <!-- Intro Banner -->
+            <div class="bg-gradient-to-r from-dark-card via-slate-800 to-dark-card p-6 md:p-8 rounded-2xl border border-dark-border shadow-xl">
+                <div class="max-w-3xl">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-brand-gold/20 text-brand-gold border border-brand-gold/30 mb-3">
+                        <i class="fa-solid fa-fire-flame-curved mr-1.5"></i> Midlife Metabolic Principles
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Nutrition & Belly Fat Strategy for Adults 40+</h2>
+                    <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+                        After age 40, hormonal adjustments and resting metabolic rate changes alter how your body processes calories and stores visceral fat. Here are 6 science-backed nutritional habits tailored for midlife metabolic health.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 6 Comprehensive Nutrition Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Guide 1 -->
+                <div class="bg-dark-card p-6 rounded-2xl border border-dark-border shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-500/10 border border-brand-500/30 text-brand-500 flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-drumstick-bite"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">1. Optimize Muscle Protein Synthesis</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                            Sarcopenia (gradual muscle loss) naturally accelerates after 40. Aim for 25–35g of high-quality protein per meal to trigger muscle protein synthesis, support lean tissue, and increase your basal metabolic rate.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-dark-border/50 text-xs text-brand-500 font-semibold">
+                        <i class="fa-solid fa-check-circle mr-1"></i> Target: Lean poultry, fish, eggs, tofu, Greek yogurt
+                    </div>
+                </div>
+
+                <!-- Guide 2 -->
+                <div class="bg-dark-card p-6 rounded-2xl border border-dark-border shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-500 flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-wheat-awn-circle-exclamation"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">2. Glycemic Control & Visceral Fat</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                            Insulin sensitivity decreases with age, making refined carbs more likely to store as deep visceral abdominal fat. Swap simple sugars for fiber-dense, low-glycemic carbs that keep insulin stable.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-dark-border/50 text-xs text-amber-500 font-semibold">
+                        <i class="fa-solid fa-check-circle mr-1"></i> Target: Oats, quinoa, lentils, berries, green vegetables
+                    </div>
+                </div>
+
+                <!-- Guide 3 -->
+                <div class="bg-dark-card p-6 rounded-2xl border border-dark-border shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-500 flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-fish"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">3. Anti-Inflammatory Joint Fats</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                            Joint stiffness and systemic inflammation make exercise uncomfortable. Incorporate healthy Omega-3 fatty acids to lubricate joint tissues, support cardiovascular health, and regulate metabolic markers.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-dark-border/50 text-xs text-cyan-500 font-semibold">
+                        <i class="fa-solid fa-check-circle mr-1"></i> Target: Salmon, walnuts, extra virgin olive oil, chia seeds
+                    </div>
+                </div>
+
+                <!-- Guide 4 -->
+                <div class="bg-dark-card p-6 rounded-2xl border border-dark-border shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-500 flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-moon"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">4. Cortisol Management & Sleep</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                            Elevated stress and poor sleep release excess cortisol, which directly promotes belly fat storage around abdominal organs. Prioritize 7–8 hours of quality sleep and avoid late-night heavy meals.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-dark-border/50 text-xs text-purple-500 font-semibold">
+                        <i class="fa-solid fa-check-circle mr-1"></i> Target: No caffeine past 2 PM, dark cool sleep room
+                    </div>
+                </div>
+
+                <!-- Guide 5 -->
+                <div class="bg-dark-card p-6 rounded-2xl border border-dark-border shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-500 flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-bone"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">5. Bone & Joint Micronutrients</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                            Bone density drops naturally in midlife. Ensure consistent intake of Vitamin D3, K2, Calcium, and Magnesium to protect bone health and prevent joint degradation during active workouts.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-dark-border/50 text-xs text-rose-500 font-semibold">
+                        <i class="fa-solid fa-check-circle mr-1"></i> Target: Leafy greens, fortified foods, sunlight exposure
+                    </div>
+                </div>
+
+                <!-- Guide 6 -->
+                <div class="bg-dark-card p-6 rounded-2xl border border-dark-border shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-500 flex items-center justify-center text-xl font-bold mb-4">
+                            <i class="fa-solid fa-glass-water"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">6. Strategic Hydration & Electrolytes</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                            Thirst sensation decreases with age, causing mild chronic dehydration. This can be mistaken for hunger and reduce joint lubrication. Drink at least 2.5–3 liters of water daily.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-dark-border/50 text-xs text-blue-500 font-semibold">
+                        <i class="fa-solid fa-check-circle mr-1"></i> Target: Water, herbal teas, electrolyte-rich lemon water
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark-card border-t border-dark-border py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center space-x-2 mb-3">
+                <div class="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center text-white text-xs">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <span class="text-lg font-black text-white">CORE<span class="text-brand-500">PRIME</span></span>
+            </div>
+            <p class="text-slate-400 text-xs max-w-lg mx-auto leading-relaxed mb-4">
+                Designed specifically for adults aged 40+ to promote sustainable fat loss, core strength, and joint protection. Always consult a physician before beginning any new exercise or nutritional regimen.
+            </p>
+            <p class="text-slate-500 text-xs font-medium">
+                © 2026 CorePrime. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Tab Switcher Logic
+        function switchTab(tab) {
+            document.getElementById('page-workout').classList.add('hidden');
+            document.getElementById('page-nutrition').classList.add('hidden');
+            
+            document.getElementById('nav-workout').className = "px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 text-slate-400 hover:text-white";
+            document.getElementById('nav-nutrition').className = "px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 text-slate-400 hover:text-white";
+
+            if (tab === 'workout') {
+                document.getElementById('page-workout').classList.remove('hidden');
+                document.getElementById('nav-workout').className = "px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 bg-brand-600 text-white shadow-md";
+            } else if (tab === 'nutrition') {
+                document.getElementById('page-nutrition').classList.remove('hidden');
+                document.getElementById('nav-nutrition').className = "px-5 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 bg-brand-600 text-white shadow-md";
+            }
+        }
+
+        // Expanded 20-Exercise Database
+        const EXERCISE_DATABASE = [
+            {
+                id: 'dead-bug',
+                title: 'Dead Bug Core Stabilizer',
+                level: 'beginner',
+                focus: ['knees', 'back', 'full', 'hips'],
+                style: ['core', 'mobility'],
+                duration: '45 seconds',
+                image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80',
+                steps: [
+                    'Lie flat on your back with arms extended straight up toward the ceiling.',
+                    'Raise your legs with knees bent at 90 degrees.',
+                    'Slowly lower your right arm backward while extending your left leg straight out.',
+                    'Return to starting position and alternate sides without letting your lower back arch.'
+                ],
+                jointSafety: 'Zero knee compression; keeps spine fully supported flat against the floor.'
+            },
+            {
+                id: 'bird-dog',
+                title: 'Bird-Dog Spinal Balance',
+                level: 'beginner',
+                focus: ['back', 'shoulders', 'hips', 'full'],
+                style: ['core', 'mobility'],
+                duration: '10-12 reps per side',
+                image: 'https://images.unsplash.com/photo-1599447421416-3414500d18a5?auto=format&fit=crop&w=600&q=80',
+                steps: [
+                    'Start on all fours with hands under shoulders and knees directly under hips.',
+                    'Reach your right arm forward and left leg backward simultaneously.',
+                    'Hold for 2 seconds at full extension, keeping hips level.',
+                    'Return gently to starting position and switch to opposite limbs.'
+                ],
+                jointSafety: 'Minimal joint impact; strengthens deep spinal erectors and glutes safely.'
+            },
+            {
+                id: 'seated-knee-lift',
+                title: 'Seated Chair Knee Lifts',
+                level: 'beginner',
+                focus: ['knees', 'hips', 'full'],
+                style: ['core', 'cardio'],
+                duration: '40 seconds',
+                image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80',
+                steps: [
+                    'Sit upright on the front half of a sturdy chair with feet flat.',
+                    'Grasp the seat sides for stability and pull your abdominal muscle tight.',
+                    'Lift one knee toward your chest smoothly without leaning backward.',
+                    'Lower controlled and repeat with opposite leg.'
+                ],
+                jointSafety: 'Zero standing knee load; excellent core activation for restricted mobility.'
+            },
+            {
+                id: 'wall-slides',
+                title: 'Scapular Wall Slides',
+                level: 'beginner',
+                focus: ['shoulders', 'back', 'full'],
+                style: ['mobility', 'core'],
+                duration: '12-15 controlled reps',
+                image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600&q=80',
+                steps: [
+                    'Stand with your back, head, and glutes flat against a wall.',
+                    'Raise arms to 90 degrees in a "W" shape with elbows touching the wall.',
+                    'Slide arms upward into a "Y" position without arching your lower spine.',
+                    'Return elbows down smoothly along the wall.'
+                ],
+                jointSafety: 'Improves shoulder posture and thoracic spine extension with zero strain.'
+            },
+            {
+                id: 'glute-bridge',
+                title: 'Supported Glute Bridge',
+                level: 'beginner',
+                focus: ['knees', 'back', 'hips', 'full'],
+                style: ['core', 'mobility'],
+                duration: '12-15 reps',
+                image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600&q=80',
+                steps: [
+                    'Lie on your back with knees bent and feet flat on the ground hip-width apart.',
+                    'Press through your heels to raise hips until knees, hips, and shoulders align.',
+                    'Squeeze glutes tightly at top position for 2 seconds.',
+                    'Lower back down slowly under control.'
+                ],
+                jointSafety: 'Decompresses lower lumbar spine while building posterior glute chain.'
+            },
+            {
+                id: 'standing-march',
+                title: 'Standing Low-Impact Cross March',
+                level: 'beginner',
+                focus: ['knees', 'hips', 'full'],
+                style: ['cardio', 'core'],
+                duration: '45 seconds',
+                image: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&w=600&q=80',
+                steps: [
+                    'Stand tall with feet hip-width apart and hands behind your head or at chest.',
+                    'Lift your right knee smoothly toward waist height.',
+                    'Rotate your upper torso gently bringing left elbow toward right knee.',
+                    'Lower and repeat on opposite side in a rhythm.'
+                ],
+                jointSafety: 'Zero jumping impact; burns calories while activating rotational obliques.'
+            },
+            {
+                id: 'pallof-press',
+                title: 'Band Pallof Anti-Rotation Press',
+                level: 'intermediate',
+                focus: ['back', 'shoulders', 'full'],
+                style: ['core'],
+                duration: '10 reps per side',
+                image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80',
+                steps: [
+                    'Anchor a light resistance band at chest height and stand perpendicular.',
+                    'Hold band handle at center of chest with both hands.',
+                    'Press hands straight out in front without letting band twist your torso.',
+                    'Hold for 2 seconds extended, then pull back to chest.'
+                ],
+                jointSafety: 'Builds core anti-rotation power without twisting stress on lumbar spine.'
+            },
+            {
+                id: 'incline-pushup',
+                title: 'Incline Wall / Counter Push-Up',
+                level: 'intermediate',
+                focus: ['shoulders', 'back', 'full'],
+                style: ['core', 'cardio'],
+                duration: '10-12 reps',
+                image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=600&q=80',
+                steps: [
+                    'Place hands slightly wider than shoulder-width on a wall or counter edge.',
+                    'Step feet back until body forms a rigid diagonal plank.',
+                    'Lower chest towards surface keeping elbows angled at 45 degrees.',
+                    'Push firmly back to starting position.'
+                ],
+                jointSafety: 'Significantly reduces wrist and shoulder load compared to floor push-ups.'
+            },
+            {
+                id: 'side-plank-knee',
+                title: 'Kneeling Side Plank Hold',
+                level: 'intermediate',
+                focus: ['back', 'hips', 'full'],
+                style: ['core'],
+                duration: '30 seconds per side',
+                image: 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?auto=format&fit=crop&w=600&q=80',
+                steps: [
+                    'Lie on your side with forearm under shoulder and knees bent at 90 degrees.',
+                    'Lift hips off floor until body forms a straight line from head to knees.',
+                    'Keep top hand on hip or extended straight up.',
+                    'Hold steadily while breathing deeply into your diaphragm.'
+                ],
+                jointSafety: 'Protects lower spine while targeting lateral oblique core muscles.'
+            },
+            {
+                id: 'wall-mountain-climber',
+                title: 'Wall-Supported Mountain Climbers',
+                level: 'intermediate',
+                focus: ['knees', 'hips', 'full'],
+                style: ['cardio', 'core'],
+                duration: '40 seconds',
+                image: 'https://images.unsplash.com/photo-1434682881908-b43d0467b798?auto=format&fit=crop&w=600&q=80',
+                steps: [
+                    'Place hands shoulder-width on a sturdy wall in an inclined plank.',
+                    'Drive one knee up toward chest in a controlled movement.',
+                    'Step foot back and alternate legs smoothly.',
+                    'Maintain a steady cardio rhythm without pounding knees.'
+                ],
+                jointSafety: 'High metabolic burn with zero ground-impact shock to feet or knees.'
+            },
+            {
+                id: 'cossack-lift',
+                title: 'Standing Side Step Lifts',
+                level: 'intermediate',
+                focus: ['hips', 'knees', 'full'],
+                style: ['cardio', 'mobility'],
+                duration: '12 reps per side',
+                image: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=600&q=80',
+                steps: [
+                    'Stand tall with hands clasped together at chest level.',
+                    'Step wider than shoulder-width into a lateral side stance.',
+                    'Shift weight gently over left leg while keeping right leg straight.',
+                    'Push off left heel to return center and repeat.'
+                ],
+                jointSafety: 'Strengthens hip adductors and knee stabilizer ligaments softly.'
+            },
+            {
+                id: 'bridge-reach',
+                title: 'Glute Bridge with Diagonal Reach',
+                level: 'intermediate',
+                focus: ['back', 'shoulders', 'hips'],
+                style: ['core', 'mobility'],
+                duration: '10 reps per side',
+                image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80',
+                steps: [
+                    'Lie on back with knees bent and feet flat on floor.',
+                    'Drive hips up into glute bridge position.',
+                    'Reach right arm diagonally across body over left shoulder touching ground.',
+                    'Lower hips down and repeat with left arm reaching over right shoulder.'
+                ],
+                jointSafety: 'Opens thoracic shoulders and hips simultaneously with zero joint shock.'
+            }
+        ];
+
+        // Routine Generation Engine
+        function generateWorkout() {
+            const level = document.getElementById('pref-level').value;
+            const focus = document.getElementById('pref-focus').value;
+            const style = document.getElementById('pref-style').value;
+            const duration = parseInt(document.getElementById('pref-duration').value, 10);
+
+            // Filter database based on user criteria
+            let filtered = EXERCISE_DATABASE.filter(ex => {
+                const matchFocus = focus === 'full' || ex.focus.includes(focus);
+                const matchStyle = ex.style.includes(style);
+                return matchFocus && matchStyle;
+            });
+
+            // Fallback if filter is too narrow
+            if (filtered.length < 3) {
+                filtered = EXERCISE_DATABASE.filter(ex => ex.focus.includes(focus) || ex.level === level);
+            }
+
+            // Shuffle filtered array
+            const shuffled = [...filtered].sort(() => 0.5 - Math.random());
+            
+            // Choose count based on duration (10 min = 3 moves, 20 min = 5 moves)
+            const targetCount = duration === 10 ? 3 : 5;
+            const selectedExercises = shuffled.slice(0, targetCount);
+
+            // Render Output Cards
+            const resultsContainer = document.getElementById('workout-results');
+            resultsContainer.innerHTML = '';
+
+            selectedExercises.forEach((ex, idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-dark-card rounded-2xl border border-dark-border overflow-hidden shadow-lg hover:border-brand-500/50 transition-colors";
+                
+                card.innerHTML = `
+                    <div class="exercise-card-split">
+                        <!-- Left Column: Portrait Photo -->
+                        <div class="exercise-img-wrapper relative">
+                            <img src="${ex.image}" alt="${ex.title}" class="exercise-portrait-img" onerror="this.src='https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80'">
+                            <div class="absolute top-3 left-3 bg-brand-600 text-white font-black text-xs px-2.5 py-1 rounded-md shadow">
+                                MOVE #${idx + 1}
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Details & Steps -->
+                        <div class="p-6 flex flex-col justify-between">
+                            <div>
+                                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                    <h4 class="text-xl font-bold text-white">${ex.title}</h4>
+                                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-brand-500 border border-brand-500/30">
+                                        <i class="fa-solid fa-clock mr-1"></i>${ex.duration}
+                                    </span>
+                                </div>
+
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="text-xs px-2.5 py-0.5 rounded bg-dark-bg text-slate-400 border border-dark-border capitalize">${ex.level}</span>
+                                    <span class="text-xs px-2.5 py-0.5 rounded bg-dark-bg text-slate-400 border border-dark-border capitalize">${ex.style[0]}</span>
+                                </div>
+
+                                <!-- Step by Step Guide -->
+                                <div class="space-y-2 mb-4">
+                                    <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Execution Steps:</p>
+                                    <ol class="list-decimal list-inside text-sm text-slate-300 space-y-1 leading-relaxed">
+                                        ${ex.steps.map(step => `<li>${step}</li>`).join('')}
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <!-- Joint Safety Note -->
+                            <div class="mt-4 pt-3 border-t border-dark-border flex items-start space-x-2 text-xs text-emerald-400 bg-brand-900/20 p-3 rounded-xl border border-brand-500/20">
+                                <i class="fa-solid fa-shield-halved text-brand-500 mt-0.5 flex-shrink-0"></i>
+                                <span><strong>40+ Joint Protection:</strong> ${ex.jointSafety}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        // Initialize default generator run on load
+        window.addEventListener('DOMContentLoaded', () => {
+            generateWorkout();
+        });
+    </script>
+</body>
+</html>
